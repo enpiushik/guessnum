@@ -1,16 +1,23 @@
 package lv.tsi.java;
 
-import java.util.InputMismatchException;
-import java.util.Random;
-import java.util.Scanner;
+import jdk.dynalink.beans.StaticClass;
+
+import java.util.*;
 
 public class Main {
     static Random rand = new Random();
     static Scanner scan = new Scanner(System.in);
+    static List<GameResult> results = new ArrayList<>();
 
     public static void main(String[] args) {
         String answer;
         do {
+
+            System.out.println("What is your name?");
+            String name = scan.next();
+
+            long t1 = System.currentTimeMillis();
+
         int myNum = rand.nextInt(100) + 1;
         System.out.println(myNum);
         boolean userLost = true;
@@ -26,6 +33,12 @@ public class Main {
                 } else {
                     System.out.println("You won!!!");
                     userLost = false;
+                    GameResult r = new GameResult();
+                    r.name = name;
+                    r.triesCount = i;
+                    results.add(r);
+                    long t2 = System.currentTimeMillis();
+                    r.time = (t2-t1)/1000;
                     break;
                 }
             }
@@ -35,9 +48,17 @@ public class Main {
             System.out.print("New game? (y/n)");
             answer = askYN();
         } while (answer.equals("y"));
+
+        showResults();
+
         System.out.println("Goodbye!");
     }
 
+    private static void showResults() {
+        for (GameResult r : results) {
+            System.out.println(r.name + " -> " + r.triesCount + "; your time" + " -> " + r.time);
+        }
+    }
 
     static String askYN () {
         String answer;
