@@ -83,7 +83,7 @@ public class Main {
         File file = new File("top_scores.txt");
         try (PrintWriter out = new PrintWriter(file)) {
             for (GameResult r : results) {
-                out.printf("%s %d %d\n", r.name, r.triesCount, r.time);
+                out.printf("%-30s %3d %d\n", r.name, r.triesCount, r.time);
             }
         } catch (IOException e) {
             System.out.println("Cannot save to file");
@@ -101,7 +101,7 @@ public class Main {
                 .sorted(Comparator.<GameResult>comparingInt(r -> r.triesCount))
                 .limit (5)
                 .forEach(r -> {
-                    System.out.printf("%s - %d - %.2fsec\n", r.name, r.triesCount, r.time / 1000.00);
+                    System.out.printf("%-25s %3d %.2fsec\n", r.name, r.triesCount, r.time / 1000.00);
                 });
         }
 
