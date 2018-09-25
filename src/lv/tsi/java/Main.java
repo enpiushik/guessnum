@@ -83,7 +83,7 @@ public class Main {
         File file = new File("top_scores.txt");
         try (PrintWriter out = new PrintWriter(file)) {
             for (GameResult r : results) {
-                out.printf("%-30s %3d %d\n", r.name, r.triesCount, r.time);
+                out.printf("%-25s %3d %d\n", r.name, r.triesCount, r.time);
             }
         } catch (IOException e) {
             System.out.println("Cannot save to file");
@@ -97,13 +97,37 @@ public class Main {
 //            System.out.printf("%s - %d - %.2fsec\n", r.name, r.triesCount, r.time / 1000.00);
 
     private static void showResults() {
+        int maxLen = findMaxNameLen ();
+
         results.stream()
                 .sorted(Comparator.<GameResult>comparingInt(r -> r.triesCount))
                 .limit (5)
                 .forEach(r -> {
-                    System.out.printf("%-25s %3d %.2fsec\n", r.name, r.triesCount, r.time / 1000.00);
+                    System.out.print(r.name);
+                    for (int i = 0; i < (maxLen - r.name.length()); i++) {
+                        System.out.print(" ");
+                    }
+                    System.out.printf("%d %.2fsec\n", r.triesCount, r.time / 1000.00);
                 });
         }
+//
+//    private static int findMaxNameLen() {
+//        int result = 0;
+//        for (GameResult r : results) {
+//            if (result < r.name.length()) {
+//                result = r.name.length();
+//            }
+//        }
+//        return result;
+//    }
+
+    private static int findMaxNameLen() {
+        return results.stream()
+                .map(r -> r.name)
+                .map(n -> n.length())
+                .max(Comparator.naturalOrder())
+                .get();
+    }
 
     static String askYN() {
         String answer;
